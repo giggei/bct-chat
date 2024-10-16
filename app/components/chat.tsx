@@ -220,7 +220,7 @@ const Chat = ({
           className={styles.input}
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Ihre Fragen zur BayernCloud Tourismus"
+          placeholder="Ihre Fragen zur BayernCloud Tourismus..."
           disabled={inputDisabled}
         />
         <button
