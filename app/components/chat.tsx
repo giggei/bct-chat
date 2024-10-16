@@ -64,6 +64,7 @@ const Chat = ({
   const [messages, setMessages] = useState([]);
   const [inputDisabled, setInputDisabled] = useState(false);
   const [threadId, setThreadId] = useState("");
+  const [showDemoButtons, setShowDemoButtons] = useState(true);
 
   // automatically scroll to bottom of chat
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -87,35 +88,23 @@ const Chat = ({
   }, []);
 
   const sendMessage = async (text) => {
-    const response = await fetch(
-      `/api/assistants/threads/${threadId}/messages`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          content: text,
-        }),
-      }
-    );
-    const stream = AssistantStream.fromReadableStream(response.body);
-    handleReadableStream(stream);
-  };
-
-  const submitActionResult = async (runId, toolCallOutputs) => {
-    const response = await fetch(
-      `/api/assistants/threads/${threadId}/actions`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          runId: runId,
-          toolCallOutputs: toolCallOutputs,
-        }),
-      }
-    );
-    const stream = AssistantStream.fromReadableStream(response.body);
-    handleReadableStream(stream);
+    setInputDisabled(true);
+    try {
+      const response = await fetch(
+        `/api/assistants/threads/${threadId}/messages`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            content: text,
+          }),
+        }
+      );
+      const stream = AssistantStream.fromReadableStream(response.body);
+      handleReadableStream(stream);
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      setInputDisabled(false); // Re-enable input if there's an error
+    }
   };
 
   const handleSubmit = (e) => {
@@ -127,7 +116,18 @@ const Chat = ({
       { role: "user", text: userInput },
     ]);
     setUserInput("");
-    setInputDisabled(true);
+    setShowDemoButtons(false);
+    scrollToBottom();
+  };
+
+  const handleDemoClick = (text) => {
+    setUserInput(text);
+    sendMessage(text);
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { role: "user", text },
+    ]);
+    setShowDemoButtons(false);
     scrollToBottom();
   };
 
@@ -142,45 +142,17 @@ const Chat = ({
   const handleTextDelta = (delta) => {
     if (delta.value != null) {
       appendToLastMessage(delta.value);
-    };
+    }
     if (delta.annotations != null) {
       annotateLastMessage(delta.annotations);
     }
   };
 
-  // imageFileDone - show image in chat
-  const handleImageFileDone = (image) => {
-    appendToLastMessage(`\n![${image.file_id}](/api/files/${image.file_id})\n`);
-  }
-
-  // toolCallCreated - log new tool call
-  const toolCallCreated = (toolCall) => {
-    if (toolCall.type != "code_interpreter") return;
-    appendMessage("code", "");
-  };
-
-  // toolCallDelta - log delta and snapshot for the tool call
-  const toolCallDelta = (delta, snapshot) => {
-    if (delta.type != "code_interpreter") return;
-    if (!delta.code_interpreter.input) return;
-    appendToLastMessage(delta.code_interpreter.input);
-  };
-
-  // handleRequiresAction - handle function call
-  const handleRequiresAction = async (
-    event: AssistantStreamEvent.ThreadRunRequiresAction
-  ) => {
-    const runId = event.data.id;
-    const toolCalls = event.data.required_action.submit_tool_outputs.tool_calls;
-    // loop over tool calls and call function handler
-    const toolCallOutputs = await Promise.all(
-      toolCalls.map(async (toolCall) => {
-        const result = await functionCallHandler(toolCall);
-        return { output: result, tool_call_id: toolCall.id };
-      })
-    );
-    setInputDisabled(true);
-    submitActionResult(runId, toolCallOutputs);
+  // handleReadableStream
+  const handleReadableStream = (stream: AssistantStream) => {
+    stream.on("textCreated", handleTextCreated);
+    stream.on("textDelta", handleTextDelta);
+    stream.on("end", handleRunCompleted); // Re-enable input when response is completed
   };
 
   // handleRunCompleted - re-enable the input form
@@ -188,31 +160,7 @@ const Chat = ({
     setInputDisabled(false);
   };
 
-  const handleReadableStream = (stream: AssistantStream) => {
-    // messages
-    stream.on("textCreated", handleTextCreated);
-    stream.on("textDelta", handleTextDelta);
-
-    // image
-    stream.on("imageFileDone", handleImageFileDone);
-
-    // code interpreter
-    stream.on("toolCallCreated", toolCallCreated);
-    stream.on("toolCallDelta", toolCallDelta);
-
-    // events without helpers yet (e.g. requires_action and run.done)
-    stream.on("event", (event) => {
-      if (event.event === "thread.run.requires_action")
-        handleRequiresAction(event);
-      if (event.event === "thread.run.completed") handleRunCompleted();
-    });
-  };
-
-  /*
-    =======================
-    === Utility Helpers ===
-    =======================
-  */
+  /* Utility Helpers */
 
   const appendToLastMessage = (text) => {
     setMessages((prevMessages) => {
@@ -236,17 +184,16 @@ const Chat = ({
         ...lastMessage,
       };
       annotations.forEach((annotation) => {
-        if (annotation.type === 'file_path') {
+        if (annotation.type === "file_path") {
           updatedLastMessage.text = updatedLastMessage.text.replaceAll(
             annotation.text,
             `/api/files/${annotation.file_path.file_id}`
           );
         }
-      })
+      });
       return [...prevMessages.slice(0, -1), updatedLastMessage];
     });
-    
-  }
+  };
 
   return (
     <div className={styles.chatContainer}>
@@ -256,6 +203,12 @@ const Chat = ({
         ))}
         <div ref={messagesEndRef} />
       </div>
+      {showDemoButtons && (
+        <div className={styles.demoButtons}>
+          <button onClick={() => handleDemoClick("Was genau ist die BayernCloud Tourismus?")}>Was genau ist die BayernCloud Tourismus?</button>
+          <button onClick={() => handleDemoClick("Wie kann ich die Daten nutzen?")}>Wie kann ich die Daten nutzen?</button>
+        </div>
+      )}
       <form
         onSubmit={handleSubmit}
         className={`${styles.inputForm} ${styles.clearfix}`}
@@ -265,12 +218,13 @@ const Chat = ({
           className={styles.input}
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          placeholder="Enter your question"
+          placeholder="Ihre Fragen zur BayernCloud Tourismus"
+          disabled={inputDisabled}
         />
         <button
           type="submit"
           className={styles.button}
-          disabled={inputDisabled}
+          disabled={inputDisabled || !userInput.trim()}
         >
           Send
         </button>
