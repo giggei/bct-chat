@@ -127,6 +127,7 @@ const Chat = ({
       ...prevMessages,
       { role: "user", text },
     ]);
+    setUserInput("");
     setShowDemoButtons(false);
     scrollToBottom();
   };
@@ -205,7 +206,8 @@ const Chat = ({
       </div>
       {showDemoButtons && (
         <div className={styles.demoButtons}>
-          <button onClick={() => handleDemoClick("Was genau ist die BayernCloud Tourismus?")}>Was genau ist die BayernCloud Tourismus?</button>
+          <button onClick={() => handleDemoClick("Wie kannst du mir helfen?")}>Wie kannst du mir helfen?</button>
+          <button onClick={() => handleDemoClick("Was ist die BayernCloud?")}>Was ist die BayernCloud?</button>
           <button onClick={() => handleDemoClick("Wie kann ich die Daten nutzen?")}>Wie kann ich die Daten nutzen?</button>
         </div>
       )}

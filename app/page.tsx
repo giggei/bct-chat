@@ -5,7 +5,7 @@ import styles from "./page.module.css";
 
 const Home = () => {
   const categories = {
-    "BayernCloud Experte": "basic-chat",
+    "BayernCloud Experte": "chat",
     //"Function calling": "function-calling",
     //"File search": "file-search",
     //All: "all",
@@ -14,11 +14,11 @@ const Home = () => {
   return (
     <main className={styles.main}>
       <div className={styles.title}>
-        Explore sample apps built with Assistants API
+        Du hast Fragen zur BayernCloud? Hier findest du Antworten!
       </div>
       <div className={styles.container}>
         {Object.entries(categories).map(([name, url]) => (
-          <a key={name} className={styles.category} href={`/examples/${url}`}>
+          <a key={name} className={styles.category} href={`/${url}`}>
             {name}
           </a>
         ))}
