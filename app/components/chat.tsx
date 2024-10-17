@@ -78,16 +78,29 @@ const Chat = ({
   // create a new threadID when chat component created
   useEffect(() => {
     const createThread = async () => {
-      const res = await fetch(`/api/assistants/threads`, {
-        method: "POST",
-      });
-      const data = await res.json();
-      setThreadId(data.threadId);
+      try {
+        const res = await fetch(`/api/assistants/threads`, {
+          method: "POST",
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setThreadId(data.threadId);
+        } else {
+          console.error("Failed to create thread:", res.statusText);
+        }
+      } catch (error) {
+        console.error("Error creating thread:", error);
+      }
     };
     createThread();
   }, []);
 
   const sendMessage = async (text) => {
+    if (!threadId) {
+      console.error("Thread ID is not set. Cannot send message.");
+      return;
+    }
+
     setInputDisabled(true);
     try {
       const response = await fetch(
@@ -99,6 +112,9 @@ const Chat = ({
           }),
         }
       );
+      if (!response.ok) {
+        throw new Error(`Error sending message: ${response.statusText}`);
+      }
       const stream = AssistantStream.fromReadableStream(response.body);
       handleReadableStream(stream);
     } catch (error) {
@@ -120,7 +136,12 @@ const Chat = ({
     scrollToBottom();
   };
 
-  const handleDemoClick = (text) => {
+  const handleDemoClick = async (text) => {
+    if (!threadId) {
+      console.error("Thread ID is not set. Cannot send demo message.");
+      return;
+    }
+
     setUserInput(text);
     sendMessage(text);
     setMessages((prevMessages) => [
