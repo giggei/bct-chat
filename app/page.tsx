@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <main className={styles.main}>
       <div className={styles.title}>
-        Du hast Fragen zur BayernCloud? Hier findest du Antworten!
+        Fragen zur BayernCloud? Hier findest du Antworten!
       </div>
       <div className={styles.container}>
         {Object.entries(categories).map(([name, url]) => (
