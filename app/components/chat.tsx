@@ -62,9 +62,9 @@ const Chat = ({
 }: ChatProps) => {
   const [userInput, setUserInput] = useState("");
   const [messages, setMessages] = useState([]);
-  const [inputDisabled, setInputDisabled] = useState(false);
+  const [inputDisabled, setInputDisabled] = useState(true);
   const [threadId, setThreadId] = useState("");
-  const [showDemoButtons, setShowDemoButtons] = useState(true);
+  const [showDemoButtons, setShowDemoButtons] = useState(false);
 
   // automatically scroll to bottom of chat
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -85,6 +85,8 @@ const Chat = ({
         if (res.ok) {
           const data = await res.json();
           setThreadId(data.threadId);
+          setInputDisabled(false); // Enable input when thread is ready
+          setShowDemoButtons(true); // Show demo buttons when thread is ready
         } else {
           console.error("Failed to create thread:", res.statusText);
         }
@@ -227,9 +229,15 @@ const Chat = ({
       </div>
       {showDemoButtons && (
         <div className={styles.demoButtons}>
-          <button onClick={() => handleDemoClick("Wie kannst du mir helfen?")}>Wie kannst du mir helfen?</button>
-          <button onClick={() => handleDemoClick("Was ist die BayernCloud?")}>Was ist die BayernCloud?</button>
-          <button onClick={() => handleDemoClick("Wie kann ich die Daten nutzen?")}>Wie kann ich die Daten nutzen?</button>
+          <button onClick={() => handleDemoClick("Wie kannst du mir helfen?")} disabled={inputDisabled}>
+            Wie kannst du mir helfen?
+          </button>
+          <button onClick={() => handleDemoClick("Was ist die BayernCloud?")} disabled={inputDisabled}>
+            Was ist die BayernCloud?
+          </button>
+          <button onClick={() => handleDemoClick("Wie kann ich die Daten nutzen?")} disabled={inputDisabled}>
+            Wie kann ich die Daten nutzen?
+          </button>
         </div>
       )}
       <form
