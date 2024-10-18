@@ -58,7 +58,7 @@
 
 .button {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #21b5ea;
   color: white;
   border: none;
   font-size: 1em;
@@ -72,7 +72,7 @@
 }
 
 .button:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: #21b5ea;
 }
 
 .messages {
@@ -82,7 +82,15 @@
   display: flex;
   flex-direction: column;
   order: 1;
-  white-space: pre-wrap;
+  line-height: 1.5; 
+}
+
+.messages ul {
+  margin: 15px;
+}
+
+.messages li {
+  margin-bottom: 5px;
 }
 
 .userMessage,
@@ -105,8 +113,8 @@
 .userMessage {
   align-self: flex-end;
   color: #ffffff;
-  background-color: #007bff;
-  border: 1px solid #0056b3;
+  background-color: #21b5ea;
+  border: 1px solid #008ecf;
 }
 
 .assistantMessage {
