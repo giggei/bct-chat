@@ -8,8 +8,8 @@
 }
 .title {
   font-size: 1.5em;
-  margin-bottom: 20px;
-  font-weight: 600;
+  margin: 20px;
+  font-weight: 500;
 }
 
 .container {
@@ -44,4 +44,35 @@
 
 .category:hover {
   background-color: #e3e3eb;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f0f0f0; /* Light background for the footer */
+  text-align: center;
+  padding: 10px 20px; /* Padding to give some space inside the footer */
+  border-top: 1px solid #ddd; /* Optional border to visually separate footer */
+  z-index: 1000; /* Ensure the footer is on top of other content */
+}
+
+.footerLinks {
+  margin-bottom: 8px;
+}
+
+.footerLink {
+  margin: 0 15px;
+  color: #21b5ea; /* Color for links */
+  text-decoration: none;
+}
+
+.footerLink:hover {
+  text-decoration: underline;
+}
+
+.footerCopyright {
+  font-size: 14px;
+  color: #666;
 }

@@ -12,18 +12,29 @@ const Home = () => {
   };
 
   return (
-    <main className={styles.main}>
-      <div className={styles.title}>
-        Fragen zur BayernCloud? Hier findest du Antworten!
+    <>
+      <main className={styles.main}>
+        <div className={styles.title}>
+          Fragen zur BayernCloud? Hier findest du Antworten!
+        </div>
+        <div className={styles.container}>
+          {Object.entries(categories).map(([name, url]) => (
+            <a key={name} className={styles.category} href={`/${url}`}>
+              {name}
+            </a>
+          ))}
+        </div>
+      </main>
+      <footer className={styles.footer}>
+      <div className={styles.footerLinks}>
+        <a href="https://bayerncloud.digital/impressum/" className={styles.footerLink}>Impressum</a>
+        <a href="https://bayerncloud.digital/datenschutz/" className={styles.footerLink}>Datenschutz</a>
       </div>
-      <div className={styles.container}>
-        {Object.entries(categories).map(([name, url]) => (
-          <a key={name} className={styles.category} href={`/${url}`}>
-            {name}
-          </a>
-        ))}
+      <div className={styles.footerCopyright}>
+        © 2024 Bayern Tourismus Marketing GmbH
       </div>
-    </main>
+    </footer>
+  </>
   );
 };
 
