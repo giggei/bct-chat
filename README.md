@@ -7,6 +7,8 @@ Buildt using the OpenAI [Assistants API](https://platform.openai.com/docs/assist
 
 ### 0. Setup an assistant on in the OpenAI platform
 
+https://platform.openai.com/assistants
+
 ### 1. Clone repo
 
 ```shell
