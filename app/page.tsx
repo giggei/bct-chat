@@ -5,7 +5,7 @@ import styles from "./page.module.css";
 
 const Home = () => {
   const categories = {
-    "BayernCloud Experte 🚀": "chat",
+    "BCT Experte 🚀": "chat",
     //"Function calling": "function-calling",
     //"File search": "file-search",
     //All: "all",
@@ -15,7 +15,7 @@ const Home = () => {
     <>
       <main className={styles.main}>
         <div className={styles.title}>
-          Fragen zur BayernCloud?<br/><br/>Hier findest du Antworten!
+          Fragen zur BayernCloud Tourismus?<br/><br/>Hier findest du Antworten!
         </div>
         <div className={styles.container}>
           {Object.entries(categories).map(([name, url]) => (
@@ -24,7 +24,9 @@ const Home = () => {
             </a>
           ))}
         </div>
-        <p>Bitte bedenkt, dass es sich um einen Demonstrator handelt, nicht um ein fertiges Produkt.</p>
+        <div className={styles.category2}>
+          <p>Bitte bedenkt, dass es sich um einen Demonstrator handelt, nicht um ein fertiges Produkt. Der BayernCloud Tourismus Experte nutzt die API von OpenAI. Mit Nutzung erklären sie sich mit deren <a target="blank" href="https://openai.com/de-DE/policies/privacy-policy/">Datenschutzrichtlinien</a> einverstanden.</p>
+        </div>
       </main>
       <footer className={styles.footer}>
       <div className={styles.footerLinks}>
