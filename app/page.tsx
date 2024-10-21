@@ -30,8 +30,8 @@ const Home = () => {
       </main>
       <footer className={styles.footer}>
       <div className={styles.footerLinks}>
-        <a href="https://bayerncloud.digital/impressum/" className={styles.footerLink}>Impressum</a>
-        <a href="https://bayerncloud.digital/datenschutz/" className={styles.footerLink}>Datenschutz</a>
+        <a href="https://bayerncloud.digital/impressum/" target="_blank" className={styles.footerLink}>Impressum</a>
+        <a href="https://bayerncloud.digital/datenschutz/" target="_blank" className={styles.footerLink}>Datenschutz</a>
       </div>
       <div className={styles.footerCopyright}>
         © 2024 Bayern Tourismus Marketing GmbH
