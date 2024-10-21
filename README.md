@@ -1,4 +1,4 @@
-# Quick and Dirty BayernCloud AI Expert
+# Quick and Dirty BayernCloud AI Expert 🚀
 
 Buildt using the OpenAI [Assistants API](https://platform.openai.com/docs/assistants/overview) and [Next.js](https://nextjs.org/docs).
 <br/>

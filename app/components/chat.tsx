@@ -235,8 +235,8 @@ const Chat = ({
           <button onClick={() => handleDemoClick("Was ist die BayernCloud?")} disabled={inputDisabled}>
             Was ist die BayernCloud?
           </button>
-          <button onClick={() => handleDemoClick("Wie kann ich die Daten nutzen?")} disabled={inputDisabled}>
-            Wie kann ich die Daten nutzen?
+          <button onClick={() => handleDemoClick("Welche Systeme sind angebunden?")} disabled={inputDisabled}>
+          Welche Systeme sind angebunden?
           </button>
         </div>
       )}
