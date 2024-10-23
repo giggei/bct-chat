@@ -51,8 +51,7 @@
   align-items: center;
   hyphens: auto; 
 	text-align: justify;
-  max-width: 600px;
-  width: 500px;
+  max-width: 500px;
   height: 120px;
   padding: 20px;
   transition: background-color 0.3s ease;
