@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import styles from "./chat.module.css";
 import { AssistantStream } from "openai/lib/AssistantStream";
 import Markdown from "react-markdown";
@@ -97,6 +97,8 @@ const Chat = ({
     createThread();
   }, []);
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const sendMessage = async (text) => {
     if (!threadId) {
       console.error("Thread ID is not set. Cannot send message.");
@@ -122,6 +124,7 @@ const Chat = ({
     } catch (error) {
       console.error("Failed to send message:", error);
       setInputDisabled(false); // Re-enable input if there's an error
+      inputRef.current?.focus();
     }
   };
 
@@ -179,10 +182,17 @@ const Chat = ({
     stream.on("end", handleRunCompleted); // Re-enable input when response is completed
   };
 
-  // handleRunCompleted - re-enable the input form
+  // handleRunCompleted - re-enable the input form and set focus
   const handleRunCompleted = () => {
     setInputDisabled(false);
   };
+
+  // Set focus on the input field whenever input is enabled again
+  useLayoutEffect(() => {
+    if (!inputDisabled) {
+      inputRef.current?.focus();
+    }
+  }, [inputDisabled]);
 
   /* Utility Helpers */
 
@@ -236,7 +246,7 @@ const Chat = ({
             Was ist die BayernCloud?
           </button>
           <button onClick={() => handleDemoClick("Welche Systeme sind angebunden?")} disabled={inputDisabled}>
-          Welche Systeme sind angebunden?
+            Welche Systeme sind angebunden?
           </button>
         </div>
       )}
@@ -245,6 +255,7 @@ const Chat = ({
         className={`${styles.inputForm} ${styles.clearfix}`}
       >
         <input
+          ref={inputRef}
           type="text"
           className={styles.input}
           value={userInput}
