@@ -25,7 +25,7 @@ const Home = () => {
           ))}
         </div>
         <div className={styles.category2}>
-          <p>Bitte bedenkt, dass es sich um einen Demonstrator handelt, nicht um ein fertiges Produkt. Der BayernCloud Tourismus Experte nutzt die API von OpenAI. Mit Nutzung erklären sie sich mit deren <a target="blank" href="https://openai.com/de-DE/policies/privacy-policy/">Datenschutzrichtlinien</a> einverstanden.</p>
+          <p>Bitte bedenkt, dass es sich um einen Demonstrator handelt, nicht um ein fertiges Produkt. Es können Fehler in den Antworten enthalten sein, prüft die Eregebnisse daher genau. Der BayernCloud Tourismus Experte nutzt die API von OpenAI. Mit Nutzung erklären sie sich mit deren <a target="blank" href="https://openai.com/de-DE/policies/privacy-policy/">Datenschutzrichtlinien</a> einverstanden.</p>
         </div>
       </main>
       <footer className={styles.footer}>
